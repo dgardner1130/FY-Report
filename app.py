@@ -89,6 +89,12 @@ if uploaded_file:
                 workbook = writer.book
                 summary_ws = writer.sheets['Summary']
 
+                # Format '% Reviews ≤ 30 Days' column as percentage
+                percent_col_idx = summary_df.columns.get_loc('% Reviews ≤ 30 Days') + 1  # 1-based index for Excel
+                for cell in summary_ws.iter_rows(min_row=2, min_col=percent_col_idx, max_col=percent_col_idx):
+                    for c in cell:
+                        c.number_format = '0.0%'
+                        
                 # Format header
                 for cell in summary_ws[1]:
                     cell.font = Font(size=12, bold=True)
