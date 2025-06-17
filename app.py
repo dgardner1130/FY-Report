@@ -47,7 +47,7 @@ if uploaded_file:
     countExceeds30 = [sum(1 for x in lst if x > 30) for lst in reviewValues]
     shortCount = [total - long for total, long in zip(lenResults, countExceeds30)]
     avgLength = [round(np.mean(lst), 2) if lst else 0 for lst in reviewValues]
-    percentage = [round((total - long)/total, 1) if total else 0 for total, long in zip(lenResults, countExceeds30)]
+    percentage = [round((total - long)/total, 3) if total else 0 for total, long in zip(lenResults, countExceeds30)]
 
     summary_df = pd.DataFrame({
         'Month': list(months.keys()),
