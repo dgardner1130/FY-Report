@@ -14,7 +14,7 @@ from asana.rest import ApiException
 from pprint import pprint
 from datetime import datetime
 
-section = st.sidebar.radio("Select Report Type", ["📊 FY Review Report", "🏗️ Approved Projects from Asana"])
+section = st.sidebar.radio("Select Report Type", ["📊 FY Review Report", "🏗️ MDP Annual Report"])
 
 if section == "📊 FY Review Report":
     # UI
@@ -159,8 +159,8 @@ if section == "📊 FY Review Report":
                         file_name="monthly_review_data.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
-elif section == "🏗️ Approved Projects from Asana":
-    st.header("🏗️ Approved Projects Report from Asana")
+elif section == "🏗️ MDP Annual Report":
+    st.header("🏗️ MDP Annual Report")
     st.write("Fetching projects from Asana's portfolio and filtering based on approval date and zoning...")
 
     # Initialize API
@@ -176,8 +176,10 @@ elif section == "🏗️ Approved Projects from Asana":
         'opt_pretty': True
     }
 
-    start_date = datetime.strptime('2024-01-01', '%Y-%m-%d').date()
-    end_date = datetime.strptime('2024-12-31', '%Y-%m-%d').date()
+    selected_year = st.number_input("Select Approval Year", min_value=2000, max_value=2100, value=2024, step=1)
+    start_date = datetime(selected_year, 1, 1).date()
+    end_date = datetime(selected_year, 12, 31).date()
+
 
     allowed_projects = {
         'Multi-Family',
