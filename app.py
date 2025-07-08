@@ -283,6 +283,7 @@ elif section == "🏗️ MDP Annual Report":
                 file_name="approved_projects_2024.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
+            
         except ApiException as e:
             st.error(f"API Exception: {e}")
     else: 
