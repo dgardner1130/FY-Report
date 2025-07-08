@@ -348,14 +348,14 @@ elif section == "🏗️ MDP Annual Report":
                 df,
                 pd.DataFrame([{
                     'Project Name': 'TOTAL',
-                    'Commerical Square Feet': CommericalSQ,
+                    'Commerical Square Feet': CommercialSQ,
                     'Area (Acres)': Area
                 }])
             ], ignore_index=True)
             st.subheader("📋 Summary")
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in 2024 with allowed land use: **{matched}**")
-            st.write(f"Commercial Square Feet **{CommericalSQ}**, Area: **{Area} acres**")
+            st.write(f"Commercial Square Feet **{CommercialSQ}**, Area: **{Area} acres**")
 
             st.dataframe(df)
 
