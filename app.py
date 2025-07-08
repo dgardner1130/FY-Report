@@ -181,7 +181,7 @@ elif section == "🏗️ MDP Annual Report":
     start_date = datetime(selected_year, 1, 1).date()
     end_date = datetime(selected_year, 12, 31).date()
 
-    zone_type = st.selectbox('Select Project Type', ['Residential', 'Commerical'])
+    zone_type = st.selectbox('Select Project Type', ['Residential', 'Commercial'])
 
     if zone_type == 'Residential':
         allowed_projects = {
@@ -286,7 +286,7 @@ elif section == "🏗️ MDP Annual Report":
 
         except ApiException as e:
             st.error(f"API Exception: {e}")
-    elif zone_type == 'Commerical': 
+    elif zone_type == 'Commercial': 
         allowed_projects = {
             'Commercial'
         }
