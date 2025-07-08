@@ -289,7 +289,7 @@ elif section == "🏗️ MDP Annual Report":
 
     elif zone_type == 'Commercial': 
         allowed_projects = {
-            'Commercial'
+            'Commercial '
         }
         try:
             api_response = portfolios_api_instance.get_items_for_portfolio(portfolio_gid, opts)
