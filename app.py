@@ -286,7 +286,7 @@ elif section == "🏗️ MDP Annual Report":
 
         except ApiException as e:
             st.error(f"API Exception: {e}")
-    else: 
+    elif zone_type == 'Commerical': 
         allowed_projects = {
             'Commercial'
         }
