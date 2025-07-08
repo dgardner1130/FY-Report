@@ -339,7 +339,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Project Number': project_number,
                     'Approval Date': approved_date,
                     'Zoning': zoning,
-                    'Commercial Square Feet': sqft
+                    'Commercial Square Feet': sqft,
                     'Area (Acres)': area_acres
                 })
 
@@ -348,7 +348,7 @@ elif section == "🏗️ MDP Annual Report":
                 df,
                 pd.DataFrame([{
                     'Project Name': 'TOTAL',
-                    'Commerical Square Feet': CommericalSQ
+                    'Commerical Square Feet': CommericalSQ,
                     'Area (Acres)': Area
                 }])
             ], ignore_index=True)
