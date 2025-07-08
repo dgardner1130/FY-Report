@@ -295,7 +295,7 @@ elif section == "🏗️ MDP Annual Report":
             projects = list(api_response)
         
             export_data = []
-            SF = TH = Multi = Area = total = matched = 0
+            CommercialSQ = Area = total = matched = 0
 
             for project in projects:
                 if not isinstance(project, dict): continue
@@ -303,7 +303,7 @@ elif section == "🏗️ MDP Annual Report":
                 total += 1
                 custom_fields = project.get('custom_fields', [])
                 approved_date = zoning = project_number = None
-                sf_lots = th_lots = mf_units = area_acres = 0
+                sqft = area_acres = 0
 
                 for field in custom_fields:
                     if not isinstance(field, dict): continue
@@ -320,12 +320,8 @@ elif section == "🏗️ MDP Annual Report":
                         zoning = enum_value.get('name') if enum_value else None
                     elif name == 'Project No':
                         project_number = field.get('text_value')
-                    elif name == 'SF Lots':
-                        sf_lots = field.get('number_value') or 0
-                    elif name == 'TH Lots':
-                        th_lots = field.get('number_value') or 0
-                    elif name == 'Multi-Family Units':
-                        mf_units = field.get('number_value') or 0
+                    elif name == 'Commercial Square Feet':
+                        sqft = field.get('number_value') or 0
                     elif name == 'Total Site Acres':
                         area_acres = field.get('number_value') or 0
 
@@ -335,21 +331,15 @@ elif section == "🏗️ MDP Annual Report":
                     continue
 
                 matched += 1
-                SF += sf_lots
-                TH += th_lots
-                Multi += mf_units
+                CommercialSQ += sqft
                 Area += area_acres
-                total_units = sf_lots + th_lots + mf_units
 
                 export_data.append({
                     'Project Name': project.get('name'),
                     'Project Number': project_number,
                     'Approval Date': approved_date,
                     'Zoning': zoning,
-                    'SF Lots': sf_lots,
-                    'TH Lots': th_lots,
-                    'Multi-Family Units': mf_units,
-                    'Total Units/Lots': total_units,
+                    'Commercial Square Feet': sqft
                     'Area (Acres)': area_acres
                 })
 
@@ -358,17 +348,14 @@ elif section == "🏗️ MDP Annual Report":
                 df,
                 pd.DataFrame([{
                     'Project Name': 'TOTAL',
-                    'SF Lots': SF,
-                    'TH Lots': TH,
-                    'Multi-Family Units': Multi,
-                    'Total Units/Lots': SF + TH + Multi,
+                    'Commerical Square Feet': CommericalSQ
                     'Area (Acres)': Area
                 }])
             ], ignore_index=True)
             st.subheader("📋 Summary")
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in 2024 with allowed land use: **{matched}**")
-            st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
+            st.write(f"Commercial Square Feet **{CommericalSQ}**, Area: **{Area} acres**")
 
             st.dataframe(df)
 
