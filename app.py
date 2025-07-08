@@ -215,7 +215,7 @@ elif section == "🏗️ Approved Projects from Asana":
                 elif name == 'Proposed Land Use':
                     enum_value = field.get('enum_value')
                     zoning = enum_value.get('name') if enum_value else None
-                elif name == 'Project Number':
+                elif name == 'Project No':
                     project_number = field.get('text_value')
                 elif name == 'SF Lots':
                     sf_lots = field.get('number_value') or 0
