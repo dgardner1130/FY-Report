@@ -349,7 +349,7 @@ elif section == "🏗️ MDP Annual Report":
                 df,
                 pd.DataFrame([{
                     'Project Name': 'TOTAL',
-                    'Commerical Square Feet': CommercialSQ,
+                    'Commercial Square Feet': CommercialSQ,
                     'Area (Acres)': Area
                 }])
             ], ignore_index=True)
