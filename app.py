@@ -290,21 +290,97 @@ elif section == "🏗️ MDP Annual Report":
         allowed_projects = {
             'Commercial'
         }
+        try:
+            api_response = portfolios_api_instance.get_items_for_portfolio(portfolio_gid, opts)
+            projects = list(api_response)
+        
+            export_data = []
+            SF = TH = Multi = Area = total = matched = 0
 
+            for project in projects:
+                if not isinstance(project, dict): continue
 
-        st.subheader("📋 Summary")
-        st.write(f"Total projects in portfolio: **{total}**")
-        st.write(f"Projects approved in 2024 with allowed land use: **{matched}**")
-        st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
+                total += 1
+                custom_fields = project.get('custom_fields', [])
+                approved_date = zoning = project_number = None
+                sf_lots = th_lots = mf_units = area_acres = 0
 
-        st.dataframe(df)
+                for field in custom_fields:
+                    if not isinstance(field, dict): continue
+                    name = field.get('name')
+                    if name == 'Date Plan Approved':
+                        date_info = field.get('date_value')
+                        if date_info and 'date' in date_info:
+                            try:
+                                approved_date = datetime.strptime(date_info['date'], '%Y-%m-%d').date()
+                            except ValueError:
+                                continue
+                    elif name == 'Proposed Land Use':
+                        enum_value = field.get('enum_value')
+                        zoning = enum_value.get('name') if enum_value else None
+                    elif name == 'Project No':
+                        project_number = field.get('text_value')
+                    elif name == 'SF Lots':
+                        sf_lots = field.get('number_value') or 0
+                    elif name == 'TH Lots':
+                        th_lots = field.get('number_value') or 0
+                    elif name == 'Multi-Family Units':
+                        mf_units = field.get('number_value') or 0
+                    elif name == 'Total Site Acres':
+                        area_acres = field.get('number_value') or 0
 
-        # Excel Export
-        output = BytesIO()
-        df.to_excel(output, index=False)
-        st.download_button(
-            label="📥 Download Excel File",
-            data=output.getvalue(),
-            file_name="approved_projects_2024.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
+                if not approved_date or not (start_date <= approved_date <= end_date):
+                    continue
+                if zoning not in allowed_projects:
+                    continue
+
+                matched += 1
+                SF += sf_lots
+                TH += th_lots
+                Multi += mf_units
+                Area += area_acres
+                total_units = sf_lots + th_lots + mf_units
+
+                export_data.append({
+                    'Project Name': project.get('name'),
+                    'Project Number': project_number,
+                    'Approval Date': approved_date,
+                    'Zoning': zoning,
+                    'SF Lots': sf_lots,
+                    'TH Lots': th_lots,
+                    'Multi-Family Units': mf_units,
+                    'Total Units/Lots': total_units,
+                    'Area (Acres)': area_acres
+                })
+
+            df = pd.DataFrame(export_data)
+            df = pd.concat([
+                df,
+                pd.DataFrame([{
+                    'Project Name': 'TOTAL',
+                    'SF Lots': SF,
+                    'TH Lots': TH,
+                    'Multi-Family Units': Multi,
+                    'Total Units/Lots': SF + TH + Multi,
+                    'Area (Acres)': Area
+                }])
+            ], ignore_index=True)
+            st.subheader("📋 Summary")
+            st.write(f"Total projects in portfolio: **{total}**")
+            st.write(f"Projects approved in 2024 with allowed land use: **{matched}**")
+            st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
+
+            st.dataframe(df)
+
+            # Excel Export
+            output = BytesIO()
+            df.to_excel(output, index=False)
+            st.download_button(
+                label="📥 Download Excel File",
+                data=output.getvalue(),
+                file_name="approved_projects_2024.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+
+        except ApiException as e:
+            st.error(f"API Exception: {e}")
