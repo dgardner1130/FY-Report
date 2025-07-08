@@ -176,18 +176,25 @@ elif section == "🏗️ MDP Annual Report":
         'opt_pretty': True
     }
 
+    st.subheader('Filter Options')
     selected_year = st.number_input("Select Year", min_value=2000, max_value=2100, value=2024, step=1)
     start_date = datetime(selected_year, 1, 1).date()
     end_date = datetime(selected_year, 12, 31).date()
 
+    zone_type = st.selectbox('Select Project Type', ['Residential', 'Commerical'])
 
-    allowed_projects = {
-        'Multi-Family',
-        'Residential Single Family Homes',
-        'Residential Townhomes',
-        'Residential Mixed Density',
-        'Residential Duplex or Triplex'
-    }
+    if zone_type == 'Residential':
+        allowed_projects = {
+            'Multi-Family',
+            'Residential Single Family Homes',
+            'Residential Townhomes',
+            'Residential Mixed Density',
+            'Residential Duplex or Triplex'
+        }
+    else: 
+        allowed_projects = {
+            'Commercial'
+        }
 
     try:
         api_response = portfolios_api_instance.get_items_for_portfolio(portfolio_gid, opts)
