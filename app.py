@@ -164,10 +164,6 @@ elif section == "🏗️ Approved Projects from Asana":
     st.write("Fetching projects from Asana's portfolio and filtering based on approval date and zoning...")
 
     # Initialize API
-    import asana
-    from asana.rest import ApiException
-    from datetime import datetime
-
     configuration = asana.Configuration()
     configuration.access_token = st.secrets["ASANA_ACCESS_TOKEN"]  # use Streamlit secrets in production
     api_client = asana.ApiClient(configuration)
