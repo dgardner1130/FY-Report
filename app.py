@@ -176,7 +176,7 @@ elif section == "🏗️ MDP Annual Report":
         'opt_pretty': True
     }
 
-    selected_year = st.number_input("Select Approval Year", min_value=2000, max_value=2100, value=2024, step=1)
+    selected_year = st.number_input("Select Year", min_value=2000, max_value=2100, value=2024, step=1)
     start_date = datetime(selected_year, 1, 1).date()
     end_date = datetime(selected_year, 12, 31).date()
 
