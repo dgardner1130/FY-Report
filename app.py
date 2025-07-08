@@ -267,6 +267,8 @@ elif section == "🏗️ MDP Annual Report":
                     'Area (Acres)': Area
                 }])
             ], ignore_index=True)
+        except ApiException as e:
+            st.error(f"API Exception: {e}")
     else: 
         allowed_projects = {
             'Commercial'
