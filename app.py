@@ -156,7 +156,6 @@ if section == "📊 FY Review Report":
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
 elif section == "🏗️ Approved Projects from Asana":
-    ASANA_ACCESS_TOKEN = "2/1210500047726723/1210562109841363:5231a8ef084901a24b15989bbbe828cc"
     st.header("🏗️ Approved Projects Report from Asana")
     st.write("Fetching projects from Asana's portfolio and filtering based on approval date and zoning...")
 
