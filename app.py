@@ -165,11 +165,12 @@ elif section == "🏗️ MDP Annual Report":
 
     # Initialize API
     configuration = asana.Configuration()
-    configuration.access_token = st.secrets["ASANA_ACCESS_TOKEN"]  # use Streamlit secrets in production
+    configuration.access_token = st.secrets["ASANA_ACCESS_TOKEN"] 
     api_client = asana.ApiClient(configuration)
     portfolios_api_instance = asana.PortfoliosApi(api_client)
 
-    portfolio_gid = "1205175703519916"  # hardcoded or set via UI
+    portfolio_gid = "1205175703519916"
+    zoning_port = "1205174022852171"
 
     opts = {
         'opt_fields': 'custom_fields.name, custom_fields.date_value.date, custom_fields.enum_value.name, custom_fields.number_value, custom_fields.text_value, name',
@@ -194,10 +195,12 @@ elif section == "🏗️ MDP Annual Report":
 
         try:
             api_response = portfolios_api_instance.get_items_for_portfolio(portfolio_gid, opts)
+            plat_response = portfolios_api_instance.get_items_for_portfolio(zoning_port, opts)
             projects = list(api_response)
+            zones = list(plat_response)
         
             export_data = []
-            SF = TH = Multi = Area = total = matched = 0
+            SF = TH = Multi = Area = total = matched = major = minor = resub = 0
 
             for project in projects:
                 if not isinstance(project, dict): continue
@@ -205,7 +208,7 @@ elif section == "🏗️ MDP Annual Report":
                 total += 1
                 custom_fields = project.get('custom_fields', [])
                 approved_date = zoning = project_number = None
-                sf_lots = th_lots = mf_units = area_acres = 0
+                sf_lots = th_lots = mf_units = area_acres = majorsub = minorsub = redonesub = 0
 
                 for field in custom_fields:
                     if not isinstance(field, dict): continue
