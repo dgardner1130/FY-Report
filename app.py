@@ -246,6 +246,25 @@ elif section == "🏗️ MDP Annual Report":
                 Area += area_acres
                 total_units = sf_lots + th_lots + mf_units
 
+                plat_lookup = {}
+
+                for project in zones:
+                    if not isinstance(project, dict): continue
+                    custom_fields = project.get('custom_fields', [])
+                    project_number = plat_type = None
+
+                    for field in custom_fields:
+                        if not isinstance(field, dict): continue
+                        name = field.get('name')
+                        if name == 'Project No':
+                            project_number = field.get('text_value')
+                        elif name == 'Type of Plat':
+                           enum_value = field.get('enum_value')
+                        plat_type = enum_value.get('name') if enum_value else None
+
+                    if project_number and plat_type:
+                        plat_lookup[project_number] = plat_type
+
                 # Lookup matching plat info
                 plat_type = plat_lookup.get(project_number)
 
@@ -263,27 +282,6 @@ elif section == "🏗️ MDP Annual Report":
                     'Total Units/Lots': total_units,
                     'Area (Acres)': area_acres
                 })
-
-            plat_lookup = {}
-
-            for project in zones:
-                if not isinstance(project, dict): continue
-                custom_fields = project.get('custom_fields', [])
-                project_number = plat_type = None
-
-                for field in custom_fields:
-                    if not isinstance(field, dict): continue
-                    name = field.get('name')
-                    if name == 'Project No':
-                        project_number = field.get('text_value')
-                    elif name == 'Type of Plat':
-                        enum_value = field.get('enum_value')
-                        plat_type = enum_value.get('name') if enum_value else None
-
-                    if project_number and plat_type:
-                        plat_lookup[project_number] = plat_type
-
-
 
             df = pd.DataFrame(export_data)
             df = pd.concat([
