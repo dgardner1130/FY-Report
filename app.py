@@ -208,7 +208,7 @@ elif section == "🏗️ MDP Annual Report":
                 total += 1
                 custom_fields = project.get('custom_fields', [])
                 approved_date = zoning = project_number = None
-                sf_lots = th_lots = mf_units = area_acres = majorsub = minorsub = redonesub = 0
+                sf_lots = th_lots = mf_units = area_acres = 0
 
                 for field in custom_fields:
                     if not isinstance(field, dict): continue
@@ -258,6 +258,8 @@ elif section == "🏗️ MDP Annual Report":
                     'Area (Acres)': area_acres
                 })
 
+            
+
             df = pd.DataFrame(export_data)
             df = pd.concat([
                 df,
@@ -274,6 +276,7 @@ elif section == "🏗️ MDP Annual Report":
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in **{selected_year}** with allowed land use: **{matched}**")
             st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
+            st.write(project_number)
 
             st.dataframe(df)
 
