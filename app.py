@@ -281,6 +281,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Multi-Family Units': mf_units,
                     'Total Units/Lots': total_units,
                     'Area (Acres)': area_acres
+                    'Major Subdivision': major
                 })
 
             df = pd.DataFrame(export_data)
