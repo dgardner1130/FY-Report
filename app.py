@@ -268,8 +268,8 @@ elif section == "🏗️ MDP Annual Report":
                 # Lookup matching plat info
                 plat_type = plat_lookup.get(project_number)
 
-                if plat_type == 'Resubdivision Plat':
-                    resub += 1
+                if plat_type == 'Major Subdivision Plat':
+                    major += 1
 
                 export_data.append({
                     'Project Name': project.get('name'),
@@ -293,7 +293,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Multi-Family Units': Multi,
                     'Total Units/Lots': SF + TH + Multi,
                     'Area (Acres)': Area,
-                    'Plat': resub
+                    'Plat': major
                 }])
             ], ignore_index=True)
             st.subheader("📋 Summary")
