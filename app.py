@@ -294,7 +294,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Multi-Family Units': Multi,
                     'Total Units/Lots': SF + TH + Multi,
                     'Area (Acres)': Area,
-                    'Plat': major
+                    'Plat': plat_type
                 }])
             ], ignore_index=True)
             st.subheader("📋 Summary")
