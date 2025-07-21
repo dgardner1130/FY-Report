@@ -198,7 +198,27 @@ elif section == "🏗️ MDP Annual Report":
             plat_response = portfolios_api_instance.get_items_for_portfolio(zoning_port, opts)
             projects = list(api_response)
             zones = list(plat_response)
-        
+
+            # ✅ Build plat_lookup ONCE before processing projects
+            plat_lookup = {}
+            for project in zones:
+                if not isinstance(project, dict): continue
+                custom_fields = project.get('custom_fields', [])
+                project_number = plat_type = None
+
+                for field in custom_fields:
+                    if not isinstance(field, dict): continue
+                    name = field.get('name')
+                    if name == 'Project No':
+                        project_number = field.get('text_value')
+                    elif name == 'Type of Plat':
+                        enum_value = field.get('enum_value')
+                        plat_type = enum_value.get('name') if enum_value else None
+
+                if project_number and plat_type:
+                    plat_lookup[project_number] = plat_type
+
+            # ✅ Now iterate through main projects
             export_data = []
             SF = TH = Multi = Area = total = matched = 0
 
@@ -246,26 +266,6 @@ elif section == "🏗️ MDP Annual Report":
                 Area += area_acres
                 total_units = sf_lots + th_lots + mf_units
 
-                plat_lookup = {}
-
-                for project in zones:
-                    if not isinstance(project, dict): continue
-                    custom_fields = project.get('custom_fields', [])
-                    project_number = plat_type = None
-
-                    for field in custom_fields:
-                        if not isinstance(field, dict): continue
-                        name = field.get('name')
-                        if name == 'Project No':
-                            project_number = field.get('text_value')
-                        elif name == 'Type of Plat':
-                           enum_value = field.get('enum_value')
-                        plat_type = enum_value.get('name') if enum_value else None
-
-                    if project_number and plat_type:
-                        plat_lookup[project_number] = plat_type
-
-                # Lookup matching plat info
                 plat_type = plat_lookup.get(project_number)
 
                 export_data.append({
@@ -282,18 +282,16 @@ elif section == "🏗️ MDP Annual Report":
                 })
 
             df = pd.DataFrame(export_data)
-            df = pd.concat([
-                df,
-                pd.DataFrame([{
-                    'Project Name': 'TOTAL',
-                    'SF Lots': SF,
-                    'TH Lots': TH,
-                    'Multi-Family Units': Multi,
-                    'Total Units/Lots': SF + TH + Multi,
-                    'Area (Acres)': Area,
-                    'Plat': plat_type
-                }])
-            ], ignore_index=True)
+            df = pd.concat([df, pd.DataFrame([{
+                'Project Name': 'TOTAL',
+                'SF Lots': SF,
+               'TH Lots': TH,
+               'Multi-Family Units': Multi,
+                'Total Units/Lots': SF + TH + Multi,
+                'Area (Acres)': Area,
+                'Plat': ''  # total row has no single plat type
+            }])], ignore_index=True)
+
             st.subheader("📋 Summary")
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in **{selected_year}** with allowed land use: **{matched}**")
@@ -301,7 +299,6 @@ elif section == "🏗️ MDP Annual Report":
 
             st.dataframe(df)
 
-            # Excel Export
             output = BytesIO()
             df.to_excel(output, index=False)
             st.download_button(
@@ -313,6 +310,7 @@ elif section == "🏗️ MDP Annual Report":
 
         except ApiException as e:
             st.error(f"API Exception: {e}")
+
 
     elif zone_type == 'Commercial': 
         allowed_projects = {
