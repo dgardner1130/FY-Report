@@ -296,6 +296,7 @@ elif section == "🏗️ MDP Annual Report":
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in **{selected_year}** with allowed land use: **{matched}**")
             st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
+            st.write(plat_lookup)
 
             st.dataframe(df)
 
