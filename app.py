@@ -372,7 +372,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Approval Date': approved_date,
                     'Zoning': zoning,
                     'Commercial Square Feet': sqft,
-                    'Area (Acres)': area_acres
+                    'Area (Acres)': area_acres,
                     'Plat': resub
                 })
 
