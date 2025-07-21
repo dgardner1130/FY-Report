@@ -280,7 +280,7 @@ elif section == "🏗️ MDP Annual Report":
                     'TH Lots': th_lots,
                     'Multi-Family Units': mf_units,
                     'Total Units/Lots': total_units,
-                    'Area (Acres)': area_acres
+                    'Area (Acres)': area_acres,
                     'Major Subdivision': major
                 })
 
