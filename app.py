@@ -246,6 +246,12 @@ elif section == "🏗️ MDP Annual Report":
                 Area += area_acres
                 total_units = sf_lots + th_lots + mf_units
 
+                # Lookup matching plat info
+                plat_type = plat_lookup.get(project_number)
+
+                if plat_type == 'Resubmittal':
+                    resub += 1
+
                 export_data.append({
                     'Project Name': project.get('name'),
                     'Project Number': project_number,
@@ -367,6 +373,7 @@ elif section == "🏗️ MDP Annual Report":
                     'Zoning': zoning,
                     'Commercial Square Feet': sqft,
                     'Area (Acres)': area_acres
+                    'Plat': resub
                 })
 
             df = pd.DataFrame(export_data)
