@@ -268,9 +268,6 @@ elif section == "🏗️ MDP Annual Report":
                 # Lookup matching plat info
                 plat_type = plat_lookup.get(project_number)
 
-                if plat_type == 'Major Subdivision Plat':
-                    major += 1
-
                 export_data.append({
                     'Project Name': project.get('name'),
                     'Project Number': project_number,
