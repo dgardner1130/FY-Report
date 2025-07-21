@@ -249,7 +249,7 @@ elif section == "🏗️ MDP Annual Report":
                 # Lookup matching plat info
                 plat_type = plat_lookup.get(project_number)
 
-                if plat_type == 'Resubmittal':
+                if plat_type == 'Resubdivision Plat':
                     resub += 1
 
                 export_data.append({
