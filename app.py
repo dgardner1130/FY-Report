@@ -258,28 +258,25 @@ elif section == "🏗️ MDP Annual Report":
                     'Area (Acres)': area_acres
                 })
 
-            extra_stuff = []
+            plat_lookup = {}
+
             for project in zones:
-                if not isinstance(field, dict): continue
+                if not isinstance(project, dict): continue
                 custom_fields = project.get('custom_fields', [])
-                approved_date = project_number = thing = None
-                majorSub = minorSub = reDoneSub = 0
+                project_number = plat_type = None
 
                 for field in custom_fields:
                     if not isinstance(field, dict): continue
                     name = field.get('name')
-                    if name == 'Date Plan Approved':
-                        date_info = field.get('date_value')
-                        if date_info and 'date' in date_info:
-                            try:
-                                approved_date = datetime.strptime(date_info['date'], '%Y-%m-%d').date()
-                            except ValueError:
-                                continue
-                    elif name == 'Project No':
+                    if name == 'Project No':
                         project_number = field.get('text_value')
                     elif name == 'Type of Plat':
                         enum_value = field.get('enum_value')
-                        thing = enum_value.get('name') if enum_value else None
+                        plat_type = enum_value.get('name') if enum_value else None
+
+                    if project_number and plat_type:
+                        plat_lookup[project_number] = plat_type
+
 
 
             df = pd.DataFrame(export_data)
