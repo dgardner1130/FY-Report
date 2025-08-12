@@ -165,7 +165,14 @@ elif section == "🏗️ MDP Annual Report":
 
     # Initialize API
     configuration = asana.Configuration()
-    configuration.access_token = st.secrets["ASANA_ACCESS_TOKEN"] 
+    user_token = st.text_input("🔐 Enter your Asana Access Token", type="password")
+    if user_token:
+        configuration.access_token = user_token
+        api_client = asana.ApiClient(configuration)
+        portfolios_api_instance = asana.PortfoliosApi(api_client)
+    else:
+        st.warning("Please enter your Asana Access Token to proceed.")
+ 
     api_client = asana.ApiClient(configuration)
     portfolios_api_instance = asana.PortfoliosApi(api_client)
 
