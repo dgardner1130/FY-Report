@@ -266,8 +266,6 @@ elif section == "🏗️ MDP Annual Report":
                 Area += area_acres
                 total_units = sf_lots + th_lots + mf_units
 
-                plat_type = plat_lookup.get(project_number)
-
                 export_data.append({
                     'Project Name': project.get('name'),
                     'Project Number': project_number,
@@ -278,7 +276,6 @@ elif section == "🏗️ MDP Annual Report":
                     'Multi-Family Units': mf_units,
                     'Total Units/Lots': total_units,
                     'Area (Acres)': area_acres,
-                    'Plat': plat_type
                 })
 
             df = pd.DataFrame(export_data)
@@ -289,14 +286,12 @@ elif section == "🏗️ MDP Annual Report":
                'Multi-Family Units': Multi,
                 'Total Units/Lots': SF + TH + Multi,
                 'Area (Acres)': Area,
-                'Plat': ''  # total row has no single plat type
             }])], ignore_index=True)
 
             st.subheader("📋 Summary")
             st.write(f"Total projects in portfolio: **{total}**")
             st.write(f"Projects approved in **{selected_year}** with allowed land use: **{matched}**")
             st.write(f"SF Lots: **{SF}**, TH Lots: **{TH}**, Multi-Family Units: **{Multi}**, Total Units: **{SF + TH + Multi}**, Area: **{Area} acres**")
-            st.write(plat_lookup)
 
             st.dataframe(df)
 
@@ -368,7 +363,6 @@ elif section == "🏗️ MDP Annual Report":
                     'Zoning': zoning,
                     'Commercial Square Feet': sqft,
                     'Area (Acres)': area_acres,
-                    'Plat': resub
                 })
 
             df = pd.DataFrame(export_data)
